@@ -1,0 +1,60 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.dao.UserDao;
+import com.example.demo.model.entity.User;
+import com.example.demo.service.UserService;
+import com.example.demo.service.valid.UserValid;
+import com.example.demo.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private UserValid userValid;
+
+    @Override
+    public User insert(User user) {
+        userValid.validateInsert(user);
+        user.setCreated(LocalDateTime.now());
+        user.setModified(LocalDateTime.now());
+        user.setLastLogin(LocalDateTime.now());
+        user.setToken(JwtUtil.generateToken(user.getName()));
+        user.setActive(true);
+        user.getPhones().forEach(p -> p.setUser(user));
+        return userDao.save(user);
+    }
+
+    @Override
+    public User update(User user) {
+        userValid.validateUpdate(user);
+        user.setModified(LocalDateTime.now());
+        user.getPhones().forEach(p -> p.setUser(user));
+        return userDao.save(user);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        userValid.validateDelete(id);
+        userDao.deleteById(id);
+    }
+
+    @Override
+    public Optional<User> findById(UUID id) {
+        return userDao.findById(id);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
+    }
+
+}

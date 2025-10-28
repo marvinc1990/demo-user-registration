@@ -1,0 +1,188 @@
+openapi: 3.0.3
+info:
+  title: API de Usuarios
+  description: API REST para la gestión de usuarios y sus teléfonos asociados.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+tags:
+  - name: Users
+    description: Gestión de usuarios
+
+paths:
+  /api/users:
+    get:
+      tags: [Users]
+      summary: Obtener todos los usuarios
+      responses:
+        "200":
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+    post:
+      tags: [Users]
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDto"
+      responses:
+        "200":
+          description: Usuario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Error de validación o formato de datos
+    put:
+      tags: [Users]
+      summary: Actualizar un usuario por ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDto"
+      responses:
+        "200":
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Error de validación
+        "404":
+          description: Usuario no encontrado
+
+  /api/users/{id}:
+    get:
+      tags: [Users]
+      summary: Obtener un usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: Usuario no encontrado
+
+    delete:
+      tags: [Users]
+      summary: Eliminar un usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Usuario eliminado correctamente
+        "404":
+          description: Usuario no encontrado
+
+components:
+  schemas:
+    UserDto:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          example: Juan Rodriguez
+        email:
+          type: string
+          format: email
+          example: juan@rodriguez.com
+        password:
+          type: string
+          format: password
+          example: Hunter28$
+        phones:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneDto"
+
+    PhoneDto:
+      type: object
+      properties:
+        number:
+          type: string
+          example: "987654321"
+        cityCode:
+          type: string
+          example: "01"
+        countryCode:
+          type: string
+          example: "51"
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: fbd436f6-a7b3-40de-a6d0-98cbf8b9a4a4
+        name:
+          type: string
+          example: Juan Rodriguez
+        email:
+          type: string
+          example: juan@rodriguez.com
+        created:
+          type: string
+          format: date-time
+          example: 2025-10-27T22:45:00
+        modified:
+          type: string
+          format: date-time
+          example: 2025-10-27T22:45:00
+        lastLogin:
+          type: string
+          format: date-time
+          example: 2025-10-27T22:45:00
+        token:
+          type: string
+          example: eyJzdWIiOiJKdWFuIFJvZHJpZ3VleiIsImlhdCI6MTc2MTYzNDU1NSwiZ
+        isActive:
+          type: boolean
+          example: true
+        phones:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneResponse"
+
+
+    PhoneResponse:
+      type: object
+      properties:
+        number:
+          type: string
+          example: 1234567
+        cityCode:
+          type: string
+          example: 01
+        countryCode:
+          type: string
+          example: +51
