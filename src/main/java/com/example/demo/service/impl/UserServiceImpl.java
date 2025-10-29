@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,32 +28,12 @@ public class UserServiceImpl implements UserService {
         user.setLastLogin(LocalDateTime.now());
         user.setToken(JwtUtil.generateToken(user.getName()));
         user.setActive(true);
-        user.getPhones().forEach(p -> p.setUser(user));
         return userDao.save(user);
-    }
-
-    @Override
-    public User update(User user) {
-        userValid.validateUpdate(user);
-        user.setModified(LocalDateTime.now());
-        user.getPhones().forEach(p -> p.setUser(user));
-        return userDao.save(user);
-    }
-
-    @Override
-    public void delete(UUID id) {
-        userValid.validateDelete(id);
-        userDao.deleteById(id);
     }
 
     @Override
     public Optional<User> findById(UUID id) {
         return userDao.findById(id);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userDao.findAll();
     }
 
 }

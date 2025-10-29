@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,35 +28,11 @@ public class UserController {
                 UserResponse.class));
     }
 
-    @PutMapping
-    public ResponseEntity<UserResponse> update(@RequestBody UserDto userDto) {
-        User user = mapper.map(userDto, User.class);
-        return ResponseEntity.ok(mapper.map(userService.update(user),
-                UserResponse.class));
-    }
-
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Map<String, Object>> delete(@PathVariable UUID userId) {
-        userService.delete(userId);
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", userId);
-        return ResponseEntity.ok(map);
-    }
-
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getById(@PathVariable UUID userId) {
         return userService.findById(userId)
                 .map(user -> ResponseEntity.ok(mapper.map(user, UserResponse.class)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<User> users = userService.findAll();
-        List<UserResponse> list = users.stream()
-                .map(customer -> mapper.map(customer, UserResponse.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(list);
     }
 
 }
