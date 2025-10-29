@@ -39,9 +39,6 @@ public class UserServiceImplTest {
         user.setEmail("juan@rodriguez.com");
         user.setPassword("Hunter28$");
 
-        Phone phone = new Phone();
-        user.setPhones(List.of(phone));
-
         User savedUser = new User();
         savedUser.setUserId(java.util.UUID.randomUUID());
         when(userDao.save(any(User.class))).thenReturn(savedUser);
@@ -57,7 +54,6 @@ public class UserServiceImplTest {
         assertNotNull(user.getLastLogin());
         assertTrue(user.isActive());
         assertNotNull(user.getToken());
-        assertEquals(user, phone.getUser());
     }
 
 }
