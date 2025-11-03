@@ -13,19 +13,7 @@ tags:
     description: Gestión de usuarios
 
 paths:
-  /api/users:
-    get:
-      tags: [Users]
-      summary: Obtener todos los usuarios
-      responses:
-        "200":
-          description: Lista de usuarios
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/UserResponse"
+  /users:
     post:
       tags: [Users]
       summary: Crear un nuevo usuario
@@ -44,28 +32,8 @@ paths:
                 $ref: "#/components/schemas/UserResponse"
         "400":
           description: Error de validación o formato de datos
-    put:
-      tags: [Users]
-      summary: Actualizar un usuario por ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserDto"
-      responses:
-        "200":
-          description: Usuario actualizado correctamente
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserResponse"
-        "400":
-          description: Error de validación
-        "404":
-          description: Usuario no encontrado
 
-  /api/users/{id}:
+  /users/{id}:
     get:
       tags: [Users]
       summary: Obtener un usuario por ID
@@ -83,22 +51,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserResponse"
-        "404":
-          description: Usuario no encontrado
-
-    delete:
-      tags: [Users]
-      summary: Eliminar un usuario por ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Usuario eliminado correctamente
         "404":
           description: Usuario no encontrado
 

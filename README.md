@@ -31,8 +31,8 @@ Antes de ejecutar el proyecto asegúrate de tener instalado:
 
 ### 1️⃣ Clonar el repositorio
 ```bash
-git clone https://github.com/<tu-usuario>/user-api-demo.git
-cd user-api-demo
+git clone https://github.com/<tu-usuario>/demo-user-registration.git
+cd demo-user-registration
 ```
 
 ### 2️⃣ Compilar y ejecutar
@@ -53,7 +53,7 @@ Una vez iniciada la aplicación, entra a:
 ## 🧩 Endpoints principales
 
 ### 🔹 Crear un nuevo usuario
-- POST /api/users
+- POST /users
 - Content-Type: application/json
 
 📥 Ejemplo de request:
